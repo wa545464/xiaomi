@@ -1,8 +1,12 @@
 <template>
-  <div></div>
+  <div class="order">
+    <order-header></order-header>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
+import OrderHeader from '../components/OrderHeader'
 export default {
   data () {
     return {
@@ -10,7 +14,7 @@ export default {
     }
   },
   components: {
-
+    OrderHeader
   },
   methods: {
 

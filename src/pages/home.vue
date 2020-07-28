@@ -1,8 +1,15 @@
 <template>
-  <div></div>
+  <div class="home">
+    home
+    <nav-header></nav-header>
+    <router-view></router-view>
+    <nav-footer></nav-footer>
+  </div>
 </template>
 
 <script>
+import NavHeader from '../components/NavHeader'
+import NavFooter from '../components/NavFooter'
 export default {
   data () {
     return {
@@ -10,7 +17,8 @@ export default {
     }
   },
   components: {
-
+    NavFooter,
+    NavHeader
   },
   methods: {
 

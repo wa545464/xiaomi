@@ -13,5 +13,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="sass" scoped>
+#app 
+  color: red
+
 </style>
