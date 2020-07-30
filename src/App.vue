@@ -13,8 +13,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-#app 
-  color: red
-
+<style lang="scss">
+@import './assets/scss/reset.scss';
+@import './assets/scss/config.scss';
 </style>

@@ -1,5 +1,14 @@
 module.exports = {
     devServer: {
-        open: true
+        open: true,
+        proxy: {
+            '/api': {
+                changeOrigin: true,
+                target: 'http://mi.futurefe.com',
+                pathRewrite: {
+                    '/api': ''
+                }
+            }
+        }
     }
 }
