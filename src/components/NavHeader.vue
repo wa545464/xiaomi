@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     getPhoneList () {
-      this.axios.get('/api/products?categoryId=100012&pageSize=6', {
+      this.axios.get('/api/products', {
         params: {
           categoryId: 100012,
           pageSize: 6
