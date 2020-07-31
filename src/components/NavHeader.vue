@@ -174,6 +174,7 @@ export default {
             }
           }
           .children {
+            z-index: 10;
             position: absolute;
             left: 0;
             top: 112px;
@@ -185,6 +186,7 @@ export default {
             font-size: $fontK;
             border-top: 1px solid #e5e5e5;
             box-shadow: 0px 7px 6px 0px rgba(0, 0, 0, 0.11);
+            background-color: #fff;
             .product {
               position: relative;
               float: left;
