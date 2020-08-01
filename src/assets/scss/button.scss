@@ -1,0 +1,21 @@
+.btn {
+    display: inline-block;
+    width: 110px;
+    line-height: 30px;
+    text-align: center;
+    color: $colorG;
+    border: none;
+    cursor: pointer;
+    background-color: $colorA;
+}
+.default-btn {
+    background-color: $colorF;
+}
+.btn-group {
+    .btn {
+        margin-right: 10px;
+        &:last-child {
+            margin: 0;
+        }
+    }
+}

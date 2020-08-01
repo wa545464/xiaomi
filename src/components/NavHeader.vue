@@ -30,7 +30,7 @@
                 <li class="product" v-for="item in phoneList" :key="item.id">
                   <a href="javascript:;">
                     <div class="pro-img">
-                      <img :src="item.mainImage" :alt="item.subtitle" />
+                      <img v-lazy="item.mainImage" :alt="item.subtitle" />
                     </div>
                     <div class="pro-name">{{item.name}}</div>
                     <div class="pro-price">{{item.price | currency}}</div>
