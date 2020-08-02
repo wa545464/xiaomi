@@ -44,7 +44,7 @@
           <!-- slides -->
           <swiper-slide v-for="(item,index) in banners" :key="index">
             <a :href="'/#/product/' + item.id">
-              <img v-lazy="item.img" alt />
+              <img :src="item.img" alt />
             </a>
           </swiper-slide>
           <!-- Optional controls -->
@@ -83,7 +83,7 @@
                 <div class="item-info">
                   <h3>{{sub.name}}</h3>
                   <p>{{sub.subtitle}}</p>
-                  <p class="price" @click="show">{{sub.price}}元</p>
+                  <p class="price" @click="show(sub.id)">{{sub.price}}元</p>
                 </div>
               </div>
             </div>
@@ -218,8 +218,18 @@ export default {
         this.products = [res.list.slice(6, 10), res.list.slice(10, 14)]
       })
     },
-    show () {
-      this.showModal = true
+    show (id) {
+      this.axios.post('api/carts', {
+        productId: id,
+        selected: true
+      })
+        .then(res => {
+          this.$store.dispatch('saveCartCount', res.cartTotalQuantity)
+          this.showModal = true
+        })
+        .catch(() => {
+          this.showModal = true
+        })
     },
     goToCart () {
       this.$router.push('/cart')

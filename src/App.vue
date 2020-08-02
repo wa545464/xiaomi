@@ -9,6 +9,22 @@
 export default {
   name: 'App',
   components: {
+  },
+  mounted () {
+    this.getUser()
+    this.getCartCount()
+  },
+  methods: {
+    getUser () {
+      this.axios.get('api/user').then((res = {}) => {
+        this.$store.dispatch('saveUsername', res.username)
+      })
+    },
+    getCartCount () {
+      this.axios.get('api/carts/products/sum').then((res = 0) => {
+        this.$store.dispatch('saveCartCount', res)
+      })
+    }
   }
 }
 </script>

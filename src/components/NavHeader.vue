@@ -10,9 +10,12 @@
         </div>
         <div class="bar-user">
           <a href="javascript:;" v-if="username">{{username}}</a>
+          <a href="javascript:;" v-if="username">退出</a>
+          <a href="javascript:;" v-if="username">我的订单</a>
           <a href="javascript:;" v-else @click="login">登陆</a>
           <a href="javascript:;" class="my-cart" @click="goToCart">
-            <span class="icon-my-cart"></span>购物车(0)
+            <span class="icon-my-cart"></span>
+            购物车({{cartCount}})
           </a>
         </div>
       </div>
@@ -61,8 +64,15 @@
 export default {
   data () {
     return {
-      username: '',
       phoneList: []
+    }
+  },
+  computed: {
+    username () {
+      return this.$store.state.username
+    },
+    cartCount () {
+      return this.$store.state.cartCount
     }
   },
   filters: {
