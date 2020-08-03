@@ -13,8 +13,14 @@
     height: 49px;
     line-height: 49px;
 }
+.btn-middle {
+    width: 202px;
+    height: 50px;
+    line-height: 50px;
+    font-size: $fontH;
+}
 .default-btn {
-    background-color: $colorF;
+    background-color: $colorD;
 }
 .btn-group {
     .btn {

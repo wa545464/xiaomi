@@ -11,8 +11,10 @@ export default {
   components: {
   },
   mounted () {
-    this.getUser()
-    this.getCartCount()
+    if (this.$cookie.get('userid')) {
+      this.getUser()
+      this.getCartCount()
+    }
   },
   methods: {
     getUser () {

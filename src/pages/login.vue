@@ -85,7 +85,12 @@ export default {
       }).then((res) => {
         this.$cookie.set('userid', res.id, '7d')
         this.$store.dispatch('saveUsername', res.username)
-        this.$router.push('/index')
+        this.$router.push({
+          name: 'index',
+          params: {
+            from: 'login'
+          }
+        })
       })
     },
     register () {
@@ -95,7 +100,7 @@ export default {
         password,
         email: `${this.username}@163.com`
       }).then(() => {
-        alert('注册成功')
+        this.$message.success('注册成功')
       })
     }
   }

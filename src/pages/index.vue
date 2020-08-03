@@ -206,6 +206,10 @@ export default {
   },
   created () {
     this.getProducts()
+    const params = this.$route.params
+    if (params && params.from === 'login') {
+      this.getCartCount()
+    }
   },
   methods: {
     getProducts () {
@@ -233,6 +237,11 @@ export default {
     },
     goToCart () {
       this.$router.push('/cart')
+    },
+    getCartCount () {
+      this.axios.get('api/carts/products/sum').then((res = 0) => {
+        this.$store.dispatch('saveCartCount', res)
+      })
     }
   }
 }

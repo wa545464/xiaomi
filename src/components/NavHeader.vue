@@ -10,7 +10,7 @@
         </div>
         <div class="bar-user">
           <a href="javascript:;" v-if="username">{{username}}</a>
-          <a href="javascript:;" v-if="username">退出</a>
+          <a href="javascript:;" v-if="username" @click="logout">退出</a>
           <a href="javascript:;" v-if="username">我的订单</a>
           <a href="javascript:;" v-else @click="login">登陆</a>
           <a href="javascript:;" class="my-cart" @click="goToCart">
@@ -81,9 +81,6 @@ export default {
       return `￥${val.toFixed(2)}元`
     }
   },
-  components: {
-
-  },
   methods: {
     getPhoneList () {
       this.axios.get('/api/products', {
@@ -97,6 +94,12 @@ export default {
     },
     login () {
       this.$router.push('/login')
+    },
+    logout () {
+      this.axios.post('api/user/logout').then(() => {
+        this.$store.dispatch('logout')
+        this.$cookie.set('userid', '', -1)
+      })
     },
     goToCart () {
       this.$router.push('/cart')
@@ -143,28 +146,6 @@ export default {
     .container {
       position: relative;
       @include flex();
-      .header-logo {
-        width: 55px;
-        height: 55px;
-        background-color: $colorA;
-        a {
-          display: inline-block;
-          width: 110px;
-          height: 55px;
-          &::before {
-            @include bgImg(55px, 55px, '/imgs/mi-logo.png');
-            content: ' ';
-            transition: margin 0.2s;
-          }
-          &:hover::before {
-            margin-left: -55px;
-          }
-          &::after {
-            @include bgImg(55px, 55px, '/imgs/mi-home.png');
-            content: ' ';
-          }
-        }
-      }
       .header-menu {
         width: 643px;
         padding-left: 209px;

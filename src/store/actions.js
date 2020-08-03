@@ -4,5 +4,9 @@ export default {
     },
     saveCartCount ({ commit }, count) {
         commit('saveCartCount', count)
+    },
+    logout ({ commit }) {
+        commit('saveUsername', '')
+        commit('saveCartCount', 0)
     }
 }
