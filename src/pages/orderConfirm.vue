@@ -10,37 +10,23 @@
         <div class="order-address">
           <h3>收货地址</h3>
           <ul class="clearfix">
-            <li class="active-address">
+            <li
+              :class="{'active-address': selectIndex === i}"
+              v-for="(item,i) in addressList"
+              :key="i"
+              @click="selectIndex = i"
+            >
               <a href="javascript:;">
-                <div class="name">admin</div>
-                <div class="phone">18814290436</div>
-                <div class="address">北京 北京 北京 123</div>
-                <div class="iconfont icon-lajitong trash"></div>
-                <div class="iconfont icon-iconset0137 pen"></div>
+                <div class="name">{{item.receiverName}}</div>
+                <div class="phone">{{item.receiverPhone}}</div>
+                <div
+                  class="address"
+                >{{item.receiverProvince + " " + item.receiverCity + " " + item.receiverDistrict}}</div>
+                <div class="iconfont icon-lajitong trash" @click.stop="delAddress(item)"></div>
+                <div class="iconfont icon-iconset0137 pen" @click.stop="editAddress(item)"></div>
               </a>
             </li>
-            <li>
-              <a href="javascript:;">
-                <div class="name">admin</div>
-                <div class="phone">18814290436</div>
-                <div class="address">北京 北京 北京 123</div>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:;">
-                <div class="name">admin</div>
-                <div class="phone">18814290436</div>
-                <div class="address">北京 北京 北京 123</div>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:;">
-                <div class="name">admin</div>
-                <div class="phone">18814290436</div>
-                <div class="address">北京 北京 北京 123</div>
-              </a>
-            </li>
-            <li class="addAddress">
+            <li class="addAddress" @click="addAddress">
               <div class="add-icon"></div>
               <div class="tip">添加收货地址</div>
             </li>
@@ -49,27 +35,13 @@
         <div class="product-list">
           <h3>商品</h3>
           <ul>
-            <li>
+            <li v-for="(item,index) in cartList" :key="index">
               <div class="goods-name">
-                <img
-                  src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/9aab8a7fa9005ef918c9aa2d5f17c806.jpg"
-                  alt
-                />
-                <span>Redmi K20 Pro 尊享版 骁龙855 Plus， 弹出全面屏</span>
+                <img v-lazy="item.productMainImage" alt />
+                <span>{{item.productName + ' '+ item.productSubtitle}}</span>
               </div>
-              <div class="goods-info">2699元x2</div>
-              <div class="goods-price">5398元</div>
-            </li>
-            <li>
-              <div class="goods-name">
-                <img
-                  src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/9aab8a7fa9005ef918c9aa2d5f17c806.jpg"
-                  alt
-                />
-                <span>Redmi K20 Pro 尊享版 骁龙855 Plus， 弹出全面屏</span>
-              </div>
-              <div class="goods-info">2699元x2</div>
-              <div class="goods-price">5398元</div>
+              <div class="goods-info">{{item.productPrice}}元x{{item.quantity}}</div>
+              <div class="goods-price">{{item.productTotalPrice}}元</div>
             </li>
           </ul>
         </div>
@@ -85,11 +57,11 @@
           </div>
           <div class="product-info">
             商品数量：
-            <span>2件</span>
+            <span>{{count}}件</span>
           </div>
           <div class="product-info">
             商品总价：
-            <span>32371元</span>
+            <span>{{totalPrice}}元</span>
           </div>
           <div class="product-info">
             优惠活动：
@@ -101,31 +73,207 @@
           </div>
           <div class="product-info">
             应付总额：
-            <span class="large">32371元</span>
+            <span class="large">{{totalPrice}}元</span>
           </div>
         </div>
         <div class="btns">
-          <a href="javascript:;" class="btn btn-middle default-btn">返回购物车</a>
-          <a href="javascript:;" class="btn btn-middle">去结算</a>
+          <a href="/#/cart" class="btn btn-middle default-btn">返回购物车</a>
+          <a href="javascript:;" class="btn btn-middle" @click="submitOrder">去结算</a>
         </div>
       </div>
     </div>
+    <modal
+      title="删除确认"
+      modalType="small"
+      :showModal="showDelModal"
+      @confirm="submitAddress"
+      @cancel="showDelModal=false"
+    >
+      <template v-slot:body>
+        <p>您确认要删除此地址吗？</p>
+      </template>
+    </modal>
+    <modal
+      title="新增地址"
+      modalType="small"
+      :showModal="showEditModal"
+      @confirm="submitAddress"
+      @cancel="showEditModal=false"
+    >
+      <template v-slot:body>
+        <div class="edit-wrapper">
+          <div class="item">
+            <input
+              type="text"
+              class="input"
+              name="name"
+              placeholder="姓名"
+              v-model="checkItem.receiverName"
+            />
+            <input
+              type="text"
+              class="input"
+              name="phone"
+              placeholder="手机"
+              v-model="checkItem.receiverMobile"
+            />
+          </div>
+          <div class="item">
+            <select name="province" v-model="checkItem.receiverProvince">
+              <option value="北京">北京</option>
+              <option value="广东">广东</option>
+              <option value="天津">天津</option>
+            </select>
+            <select name="city" v-model="checkItem.receiverCity">
+              <option value="北京">北京</option>
+              <option value="湛江">湛江</option>
+              <option value="广州">广州</option>
+              <option value="长沙">长沙</option>
+            </select>
+            <select name="district" v-model="checkItem.receiverDistrict">
+              <option value="增城区">增城区</option>
+              <option value="东城区">东城区</option>
+              <option value="浦东区">浦东区</option>
+              <option value="天河区">天河区</option>
+              <option value="西城区">西城区</option>
+            </select>
+          </div>
+          <div class="item">
+            <textarea name="address" v-model="checkItem.receiverAddress"></textarea>
+          </div>
+          <div class="item">
+            <input type="text" class="input" placeholder="邮编" v-model="checkItem.receiverZip" />
+          </div>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
 import OrderHeader from '../components/OrderHeader'
+import Modal from '../components/Modal'
 export default {
   data () {
     return {
-
+      addressList: [], // 地址列表
+      cartList: [], // 购物车列表
+      totalPrice: 0,
+      count: 0,
+      checkItem: {}, // 选择操作的地址项
+      userAction: 0, // 用户操作：0：新增 1：编辑 2：删除
+      showDelModal: false,
+      showEditModal: false,
+      selectIndex: 0
     }
   },
   components: {
-    OrderHeader
+    OrderHeader,
+    Modal
   },
   methods: {
-
+    getAddressList () {
+      this.axios.get('api/shippings').then(res => {
+        this.addressList = res.list
+      })
+    },
+    getCartList () {
+      this.axios.get('api/carts').then(res => {
+        this.cartList = res.cartProductVoList.filter(item => item.productSelected)
+        this.totalPrice = res.cartTotalPrice
+        this.count = this.cartList.reduce((sum, item) => item.quantity + sum, 0)
+      })
+    },
+    delAddress (item) {
+      this.checkItem = item
+      this.userAction = 2
+      this.showDelModal = true
+    },
+    editAddress (item) {
+      this.checkItem = item
+      this.userAction = 1
+      this.showEditModal = true
+    },
+    addAddress () {
+      this.showEditModal = true
+      this.userAction = 0
+      this.checkItem = {}
+    },
+    submitAddress () {
+      const { checkItem, userAction } = this
+      let path, method, params = {}
+      if (userAction === 2) {
+        method = 'delete'
+        path = `api/shippings/${checkItem.id}`
+      }
+      else if (userAction === 1) {
+        method = 'put'
+        path = `api/shippings/${checkItem.id}`
+      } else {
+        method = "post"
+        path = 'api/shippings'
+      }
+      if (userAction === 1 || userAction === 0) {
+        let { receiverAddress, receiverCity, receiverDistrict, receiverMobile, receiverName, receiverProvince, receiverZip } = this.checkItem
+        let errMsg = ''
+        params = {
+          receiverAddress,
+          receiverCity,
+          receiverDistrict,
+          receiverMobile,
+          receiverName,
+          receiverProvince,
+          receiverZip
+        }
+        if (!receiverName) {
+          errMsg = '请输入收货人姓名'
+        } else if (!receiverMobile || !/\d{11}/.test(receiverMobile)) {
+          errMsg = '请输入正确的手机号码'
+        } else if (!receiverProvince || !receiverCity || !receiverDistrict) {
+          errMsg = '请选择省份/城市/区县'
+        } else if (!receiverAddress) {
+          errMsg = '请输入收货地址'
+        } else if (!/\d{6}/.test(receiverZip)) {
+          errMsg = '请输入6位邮编'
+        }
+        if (errMsg) {
+          this.$message.error(errMsg)
+          return
+        }
+      }
+      this.axios[method](path, params).then(() => {
+        this.closeModal()
+        this.getAddressList()
+        this.$message.success('操作成功')
+      })
+    },
+    closeModal () {
+      this.checkItem = {}
+      this.userAction = ''
+      this.showDelModal = false
+      this.showEditModal = false
+    },
+    submitOrder () {
+      let item = this.addressList[this.selectIndex]
+      if (!item) {
+        this.$message.error('请选择收货地址')
+        return
+      }
+      this.axios.post('api/orders', {
+        shippingId: item.id
+      }).then(res => {
+        this.$router.push({
+          path: '/order/pay',
+          query: {
+            orderNo: res.orderNo
+          }
+        })
+      })
+    }
+  },
+  created () {
+    this.getAddressList()
+    this.getCartList()
   }
 }
 </script>
@@ -292,6 +440,36 @@ export default {
       a {
         margin-left: 20px;
       }
+    }
+  }
+}
+.edit-wrapper {
+  font-size: $fontJ;
+  .item {
+    margin-bottom: 15px;
+    .input {
+      width: 283px;
+      height: 40px;
+      border: 1px solid $colorH;
+      padding-left: 15px;
+      line-height: 40px;
+      & + .input {
+        margin-left: 14px;
+      }
+    }
+    select {
+      width: 52px;
+      height: 40px;
+      line-height: 40px;
+      margin-right: 15px;
+      border: 1px solid $colorH;
+    }
+    textarea {
+      width: 100%;
+      height: 62px;
+      padding: 13px 15px;
+      box-sizing: border-box;
+      border: 1px solid $colorH;
     }
   }
 }
