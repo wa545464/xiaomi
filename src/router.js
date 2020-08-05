@@ -49,7 +49,7 @@ export default new Router({
                     component: () => import('./pages/orderConfirm.vue')
                 },
                 {
-                    path: 'list',
+                    path: 'orderList',
                     name: 'order-list',
                     component: () => import('./pages/orderList.vue')
                 },
@@ -57,6 +57,10 @@ export default new Router({
                     path: 'pay',
                     name: 'order-pay',
                     component: () => import('./pages/orderPay.vue')
+                }, {
+                    path: 'alipay',
+                    name: 'order-alipay',
+                    component: () => import('./pages/alipay.vue')
                 }
             ]
         }
