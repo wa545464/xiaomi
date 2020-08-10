@@ -4,11 +4,12 @@ import VueAxios from 'vue-axios'
 import VueLazyLoad from 'vue-lazyload'
 import VueCookie from 'vue-cookie'
 import { Message } from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+
 import router from './router'
 import App from './App.vue'
 import store from './store'
 import './assets/font/iconfont.css'
+import './assets/scss/element-variables.scss'
 // import env from './env'
 
 Vue.config.productionTip = false
